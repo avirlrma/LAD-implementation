@@ -1,3 +1,4 @@
+import copy
 
 __all__ = ['Term', 'empty_term', 'make_point']
 
@@ -25,12 +26,7 @@ class Term:
     return (p & self._pos_lits) == self._pos_lits and (p & self._neg_lits) == 0
 
   def clone(self):
-    term = Term()
-    term.max_index = self.max_index
-    term.last_index= self.last_index
-    term._pos_lits = self._pos_lits
-    term._neg_lits = self._neg_lits
-    return term
+    return copy.deepcopy(self)
 
   def get_literals_with_one_term_dropped(self):
     tmp = 2
@@ -46,9 +42,9 @@ class Term:
         yield term
       tmp <<= 1
 
-    if self.last_index < 0 and self._neg_lits & tmp:
+    if self.last_index < 0 and self._pos_lits & tmp:
       term = self.clone()
-      term._neg_lits ^= tmp
+      term._pos_lits ^= tmp
       yield term
 
   def __eq__(self, other):
@@ -59,7 +55,17 @@ class Term:
     return hash((self._pos_lits, self._neg_lits))
 
   def __repr__(self):
-    return f'Term<{self._pos_lits:b},{self._neg_lits:b}>'
+    x = 1
+    rep = ""
+    for i in range(32):
+        a = (x & self._pos_lits)>0
+        b = (x & self._neg_lits)>0
+        rep += ("x" +str(i) + ", ")*int(a) +\
+         ("~" + "x" +str(i) + ", ")*int(b)
+        x*=2
+    rep = rep[:-2]
+
+    return 'Term<{}>'.format(rep)
 
 
 def empty_term():
@@ -71,8 +77,8 @@ def make_point(xs):
     p |= x << i
   return p
 
-
 if __name__ == "__main__":
+
   term = Term()
 
   term.add_literals([1,-2,3,4])
