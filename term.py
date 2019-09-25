@@ -30,7 +30,7 @@ class Term:
 
   def get_literals_with_one_term_dropped(self):
     tmp = 2
-    for i in range(1, abs(self.last_index)):
+    for i in range(1, self.max_index):
       if self._pos_lits & tmp:
         term = self.clone()
         term._pos_lits ^= tmp
