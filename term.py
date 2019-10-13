@@ -25,6 +25,9 @@ class Term:
   def eval_at_point(self, p):
     return (p & self._pos_lits) == self._pos_lits and (p & self._neg_lits) == 0
 
+  def eval_set(self, pset):
+    return [i for i,x in enumerate(pset) if self.eval_at_point(x)==1]
+
   def clone(self):
     return copy.deepcopy(self)
 

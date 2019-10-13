@@ -1,4 +1,5 @@
 from term import *
+from theory import *
 
 #todo: add hamming distance & monotone??
 
@@ -42,4 +43,8 @@ if __name__ == "__main__":
   n = 3
 
   lad = LAD(n, B_pls, B_mns)
-  print(lad.generate_patterns(5,False))
+  positive_patterns = lad.generate_patterns(5)
+
+  th = Theory(lad)
+  print(th.select_patterns())
+  #print(lad.generate_patterns(5,False))
