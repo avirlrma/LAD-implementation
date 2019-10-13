@@ -46,5 +46,13 @@ if __name__ == "__main__":
   positive_patterns = lad.generate_patterns(5)
 
   th = Theory(lad)
-  print(th.select_patterns())
+  positive_patterns = th.select_patterns(True)
+  negative_patterns = th.select_patterns(False)
+  print(negative_patterns)
+
+  disc = {**th.calculate_weights(positive_patterns,True), \
+    **th.calculate_weights(negative_patterns,False)}
+
+  print(disc)
+
   #print(lad.generate_patterns(5,False))
